@@ -1,0 +1,45 @@
+{
+  "name": "contract-deals",
+  "version": "1.0.0",
+  "description": "contract-deals",
+  "main": "server.mjs",
+  "directories": {
+    "doc": "contract-deals"
+  },
+  "type": "module",
+  "scripts": {
+    "__options__":"echo name project New Kind",
+    "options_clean": "make clean && make -f Makefile.PHONY.wasi clean",
+    "__CC_native__":"echo name project New Kind",
+    "native": "./CC_native",
+    "native_run":"./newkind &",
+    "__CC_html__":"echo name project New Kind",
+    "html": "./CC_html",
+    "html_install": "make -f Makefile.PHONY.wasi install",
+    "html_uninstall": "make -f Makefile.PHONY.wasi uninstall",
+    "__CC_git__":"echo name project New Kind",
+    "git": "git status && git add -A && git commit -am 'update' && git push",
+    "git_status": "git status",
+    "git_pull": "git pull",
+    "git_clean": "git clean -f",
+    "git_reset": "git reset --hard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zababurinsv/contract-deals.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Zababurin Sergey",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/zababurinsv/contract-deals/issues"
+  },
+  "homepage": "https://github.com/zababurinsv/contract-deals#readme",
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules/*"
+    ]
+  }
+}

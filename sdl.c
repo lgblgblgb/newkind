@@ -24,7 +24,9 @@
 
 #include <SDL.h>
 #include "SDL2_gfxPrimitives.h"
-
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 #include "sdl.h"
 #include "elite.h"
 #include "keyboard.h"
@@ -418,7 +420,12 @@ void gfx_update_screen (void)
 	//SDL_RenderClear(sdl_ren);
 	// FIXME:
 	// more sane framerate control
-	SDL_Delay(speed_cap);
+    #ifdef __EMSCRIPTEN__
+        emscripten_sleep(speed_cap);
+    #else
+        SDL_Delay(speed_cap);
+    #endif
+    //
 
 }
 
@@ -1081,23 +1088,30 @@ static void shutdown_sdl ( void )
 
 int init_sdl ( void )
 {
-	if (SDL_Init(
-#ifdef __EMSCRIPTEN__
+    printf("hello, world!\n");
+
+    if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) < 0) {
+        printf("SDL_Init() failed: %s\n", SDL_GetError());
+        return 1;
+    }
+//	if (SDL_Init(
+//#ifdef __EMSCRIPTEN__
 		/* It seems there is an issue with emscripten SDL2: SDL_Init does not work if TIMER and/or HAPTIC is tried to be intialized or just "EVERYTHING" is used!! */
-		SDL_INIT_EVERYTHING & ~(SDL_INIT_TIMER | SDL_INIT_HAPTIC)
-#else
-		SDL_INIT_EVERYTHING
-#endif
-	)) {
-		ERROR_WINDOW("Cannot initialize SDL: %s", SDL_GetError());
-		return 1;
-	}
+//		SDL_INIT_EVERYTHING & ~(SDL_INIT_TIMER | SDL_INIT_HAPTIC)
+//        SDL_Init(SDL_INIT_VIDEO)
+//#else
+//		SDL_INIT_EVERYTHING
+//#endif
+//	)) {
+//		ERROR_WINDOW("Cannot initialize SDL: %s", SDL_GetError());
+//		return 1;
+//	}
 	atexit(shutdown_sdl);
-	pref_path = SDL_GetPrefPath("lgb", "newkind");
-	if (!pref_path) {
-		ERROR_WINDOW("Cannot make use of pref path: %s", SDL_GetError());
-		return 1;
-	}
+//	pref_path = SDL_GetPrefPath("lgb", "newkind");
+//	if (!pref_path) {
+//		ERROR_WINDOW("Cannot make use of pref path: %s", SDL_GetError());
+//		return 1;
+//	}
 	//SDL_StartTextInput();
 #if 0
 	allegro_init();
